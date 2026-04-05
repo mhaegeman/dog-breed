@@ -11,7 +11,7 @@ dog_breed_explorer:
       project: "{{ env_var('GCP_PROJECT_ID') }}"
       dataset: analytics_dev
       threads: 4
-      location: europe-west1
+      location: US
       timeout_seconds: 300
       priority: interactive
 
@@ -21,6 +21,6 @@ dog_breed_explorer:
       project: "{{ env_var('GCP_PROJECT_ID') }}"
       dataset: analytics
       threads: 4
-      location: europe-west1
+      location: US
       timeout_seconds: 600
       priority: batch

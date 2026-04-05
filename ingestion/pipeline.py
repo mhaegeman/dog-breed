@@ -86,7 +86,7 @@ def run_pipeline() -> dict:
     # ── 2. Load into BigQuery bronze layer ────────────────────────────────
     bq_pipeline = dlt.pipeline(
         pipeline_name="dog_breeds_bq",
-        destination=dlt.destinations.bigquery(location="europe-west1"),
+        destination="bigquery",
         dataset_name="bronze",
     )
     bq_info = bq_pipeline.run(dog_breeds_resource())
