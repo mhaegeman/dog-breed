@@ -32,15 +32,14 @@ DOG_API_BASE_URL = "https://api.thedogapi.com/v1"
 # ---------------------------------------------------------------------------
 
 @dlt.resource(name="dog_api_raw", write_disposition="replace")
-def dog_breeds_resource(
-    api_key: str = dlt.config.value,  # resolved from secrets / env vars
-):
+def dog_breeds_resource():
     """Yield every breed returned by the Dog API as individual records.
 
     The API returns the full breed list in a single JSON array (~170 breeds),
     so pagination is not required.  We use ``write_disposition="replace"`` to
     fully refresh the table on each run.
     """
+    api_key = os.getenv("DOG_API_KEY", "")
     headers = {"x-api-key": api_key} if api_key else {}
 
     response = requests.get(

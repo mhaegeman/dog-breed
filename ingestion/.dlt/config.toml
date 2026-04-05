@@ -4,6 +4,3 @@
 
 [runtime]
 log_level = "INFO"
-
-[sources.dog_api]
-base_url = "https://api.thedogapi.com/v1"
