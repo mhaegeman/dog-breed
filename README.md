@@ -86,10 +86,15 @@ export GCP_PROJECT_ID="your-project-id"
 export DOG_API_KEY="your-api-key"
 export DESTINATION__FILESYSTEM__BUCKET_URL="gs://your-bucket"
 
-# 8. Run the ingestion pipeline locally
+# 8. Authenticate to Google Cloud
+gcloud auth login
+gcloud auth application-default login
+gcloud config set project $GCP_PROJECT_ID
+
+# 9. Run the ingestion pipeline locally
 cd ingestion && python pipeline.py && cd ..
 
-# 9. Run dbt
+# 10. Run dbt
 cd dbt && dbt build --target dev && cd ..
 ```
 
