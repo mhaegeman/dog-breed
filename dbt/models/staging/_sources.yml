@@ -30,7 +30,3 @@ sources:
             description: "Comma-separated temperament traits"
           - name: breed_group
             description: "AKC breed group classification"
-          - name: bred_for
-            description: "Original breeding purpose"
-          - name: origin
-            description: "Country or region of origin"

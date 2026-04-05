@@ -30,8 +30,6 @@ parsed as (
         cast(id as int64)                                        as id,
         name,
         trim(breed_group)                                        as breed_group,
-        trim(bred_for)                                           as bred_for,
-        trim(origin)                                             as origin,
         trim(temperament)                                        as temperament,
         reference_image_id,
 

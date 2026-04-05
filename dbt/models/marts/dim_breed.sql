@@ -24,8 +24,6 @@ enriched as (
         id                                                       as breed_id,
         name                                                     as breed_name,
         breed_group,
-        bred_for,
-        origin,
         temperament,
         reference_image_id,
 
