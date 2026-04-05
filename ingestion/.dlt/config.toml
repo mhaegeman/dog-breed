@@ -1,0 +1,6 @@
+# dlt pipeline configuration — non-sensitive settings only.
+# Sensitive values (API keys, GCP credentials) belong in secrets.toml
+# or environment variables. See secrets.toml.example for the expected shape.
+
+[runtime]
+log_level = "INFO"

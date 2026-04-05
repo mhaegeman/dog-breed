@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_dog_breeds
+    description: >
+      Cleaned and type-cast dog breed data.  Parses string ranges for life span,
+      weight, and height into discrete numeric columns.
+    columns:
+      - name: id
+        description: "Unique breed identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: name
+        description: "Official breed name"
+        tests:
+          - not_null
+          - unique
+
+      - name: life_span_min_years
+        description: "Lower bound of expected life span in years"
+        tests:
+          - positive_values
+
+      - name: life_span_max_years
+        description: "Upper bound of expected life span in years"
+        tests:
+          - positive_values
+
+      - name: weight_min_lb
+        description: "Lower bound of breed weight in pounds"
+        tests:
+          - positive_values
+
+      - name: weight_max_lb
+        description: "Upper bound of breed weight in pounds"

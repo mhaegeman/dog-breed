@@ -1,0 +1,26 @@
+# Profiles for the Dog Breed Explorer dbt project.
+# In CI/CD the GCP_PROJECT_ID env var is injected from GitHub Secrets.
+# Locally, export it or set it in your shell profile.
+
+dog_breed_explorer:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: analytics_dev
+      threads: 4
+      location: europe-west1
+      timeout_seconds: 300
+      priority: interactive
+
+    prod:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: analytics
+      threads: 4
+      location: europe-west1
+      timeout_seconds: 600
+      priority: batch

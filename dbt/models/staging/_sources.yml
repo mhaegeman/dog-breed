@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw data ingested by the dlt pipeline from The Dog API"
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: bronze
+    tables:
+      - name: dog_api_raw
+        description: >
+          Raw dog breed records loaded by dlt.  Each row represents one breed
+          with nested weight/height objects auto-flattened by dlt using double-
+          underscore separators (e.g. weight__imperial, height__metric).
+        columns:
+          - name: id
+            description: "Unique breed identifier from The Dog API"
+          - name: name
+            description: "Official breed name"
+          - name: life_span
+            description: "Life span range as a string, e.g. '10 - 12 years'"
+          - name: weight__imperial
+            description: "Weight range in pounds, e.g. '50 - 60'"
+          - name: weight__metric
+            description: "Weight range in kilograms, e.g. '23 - 27'"
+          - name: height__imperial
+            description: "Height range in inches, e.g. '25 - 27'"
+          - name: height__metric
+            description: "Height range in centimetres, e.g. '64 - 69'"
+          - name: temperament
+            description: "Comma-separated temperament traits"
+          - name: breed_group
+            description: "AKC breed group classification"

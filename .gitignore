@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+*.egg
+
+# Environment
+.env
+.env.*
+
+# GCP service account keys — never commit these
+*-credentials.json
+*-sa-key.json
+service-account*.json
+
+# dlt secrets (template is committed, actual secrets are not)
+secrets.toml
+
+# dlt working directories
+_storage/
+pipelines/
+
+# dbt
+target/
+dbt_packages/
+dbt_modules/
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

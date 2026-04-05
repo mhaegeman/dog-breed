@@ -1,0 +1,67 @@
+name: Deploy — Cloud Function & dbt prod
+
+on:
+  push:
+    branches: [main]
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: ${{ secrets.GCP_REGION }}
+  DBT_PROFILES_DIR: .
+
+jobs:
+  deploy:
+    name: Deploy pipeline & run dbt prod
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      # ── Deploy dlt Cloud Function ──────────────────────────────────────
+      - name: Deploy Cloud Function (Gen2)
+        working-directory: ingestion
+        run: |
+          gcloud functions deploy dog-breed-ingest \
+            --gen2 \
+            --project="${GCP_PROJECT_ID}" \
+            --region="${GCP_REGION}" \
+            --runtime=python312 \
+            --source=. \
+            --entry-point=handler \
+            --trigger-http \
+            --no-allow-unauthenticated \
+            --timeout=540 \
+            --memory=512Mi \
+            --set-env-vars="DOG_API_KEY=${{ secrets.DOG_API_KEY }},DESTINATION__FILESYSTEM__BUCKET_URL=${{ secrets.GCS_BUCKET_URL }}" \
+            --service-account="${{ secrets.SA_EMAIL }}"
+
+      # ── Run dbt against prod ───────────────────────────────────────────
+      - name: Install dbt-bigquery
+        run: pip install dbt-bigquery
+
+      - name: Install dbt packages
+        working-directory: dbt
+        run: dbt deps
+
+      - name: dbt build (prod)
+        working-directory: dbt
+        run: dbt build --target prod
