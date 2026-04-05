@@ -63,25 +63,25 @@ def run_pipeline() -> dict:
     """Execute the dual-destination pipeline and return load info summaries."""
     run_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-    bucket_url = os.getenv(
-        "DESTINATION__FILESYSTEM__BUCKET_URL",
-        dlt.config.get("destination.filesystem.bucket_url", str) or "gs://dog-breed-explorer-raw",
-    )
+    bucket_url = os.getenv("DESTINATION__FILESYSTEM__BUCKET_URL", "")
 
     results = {}
 
     # ── 1. Archive raw JSON to Cloud Storage, partitioned by date ─────────
-    gcs_pipeline = dlt.pipeline(
-        pipeline_name="dog_breeds_gcs",
-        destination="filesystem",
-        dataset_name=f"raw/dog_breeds/{run_date}",
-    )
-    gcs_info = gcs_pipeline.run(
-        dog_breeds_resource(),
-        loader_file_format="jsonl",
-    )
-    logger.info("GCS load complete: %s", gcs_info)
-    results["gcs"] = str(gcs_info)
+    if bucket_url:
+        gcs_pipeline = dlt.pipeline(
+            pipeline_name="dog_breeds_gcs",
+            destination="filesystem",
+            dataset_name=f"raw/dog_breeds/{run_date}",
+        )
+        gcs_info = gcs_pipeline.run(
+            dog_breeds_resource(),
+            loader_file_format="jsonl",
+        )
+        logger.info("GCS load complete: %s", gcs_info)
+        results["gcs"] = str(gcs_info)
+    else:
+        logger.info("DESTINATION__FILESYSTEM__BUCKET_URL not set, skipping GCS archive")
 
     # ── 2. Load into BigQuery bronze layer ────────────────────────────────
     bq_pipeline = dlt.pipeline(
