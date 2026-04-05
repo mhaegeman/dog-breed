@@ -72,29 +72,26 @@ python -m venv venv && source venv/bin/activate
 # 3. Ensure setuptools is available (required by dlt on Python 3.12+)
 pip install --upgrade pip setuptools
 
-# 4. Install ingestion dependencies
+# 4. Install all Python dependencies (single call avoids version conflicts)
 pip install -r ingestion/requirements.txt
 
-# 5. Install dbt
-pip install dbt-bigquery
-
-# 6. Install dbt packages
+# 5. Install dbt packages
 cd dbt && dbt deps && cd ..
 
-# 7. Set required environment variables
+# 6. Set required environment variables
 export GCP_PROJECT_ID="your-project-id"
 export DOG_API_KEY="your-api-key"
 export DESTINATION__FILESYSTEM__BUCKET_URL="gs://your-bucket"
 
-# 8. Authenticate to Google Cloud
+# 7. Authenticate to Google Cloud
 gcloud auth login
 gcloud auth application-default login
 gcloud config set project $GCP_PROJECT_ID
 
-# 9. Run the ingestion pipeline locally
+# 8. Run the ingestion pipeline locally
 cd ingestion && python pipeline.py && cd ..
 
-# 10. Run dbt
+# 9. Run dbt
 cd dbt && dbt build --target dev && cd ..
 ```
 
