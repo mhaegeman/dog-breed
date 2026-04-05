@@ -69,24 +69,27 @@ cd dog-breed
 # 2. Create a virtual environment
 python -m venv venv && source venv/bin/activate
 
-# 3. Install ingestion dependencies
+# 3. Ensure setuptools is available (required by dlt on Python 3.12+)
+pip install --upgrade pip setuptools
+
+# 4. Install ingestion dependencies
 pip install -r ingestion/requirements.txt
 
-# 4. Install dbt
+# 5. Install dbt
 pip install dbt-bigquery
 
-# 5. Install dbt packages
+# 6. Install dbt packages
 cd dbt && dbt deps && cd ..
 
-# 6. Set required environment variables
+# 7. Set required environment variables
 export GCP_PROJECT_ID="your-project-id"
 export DOG_API_KEY="your-api-key"
 export DESTINATION__FILESYSTEM__BUCKET_URL="gs://your-bucket"
 
-# 7. Run the ingestion pipeline locally
+# 8. Run the ingestion pipeline locally
 cd ingestion && python pipeline.py && cd ..
 
-# 8. Run dbt
+# 9. Run dbt
 cd dbt && dbt build --target dev && cd ..
 ```
 
